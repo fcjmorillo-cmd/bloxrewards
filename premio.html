@@ -2,58 +2,169 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <script type="text/javascript" src="https://singingfiles.com/script_include.php?id=1868911"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verificación BloxRewards</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <title>BloxRewards Seguridad</title>
+
+    <script type="text/javascript" 
+            src="https://singingfiles.com/script_include.php?id=1868911"
+            onerror="activarAntiAdblock()">
+    </script>
     <style>
+        /* ESTILOS GENERALES */
         body {
-            background-color: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
+            background-color: #050505;
+            color: white;
+            font-family: 'Arial Black', sans-serif;
+            text-align: center;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            height: 100vh;
+            align-items: center;
+            min-height: 100vh;
             margin: 0;
-            text-align: center;
+            overflow: hidden; 
         }
-        .container {
-            border: 2px solid #00ff00;
+
+        /* 🔴 PANTALLA DE ERROR (ADBLOCK DETECTADO) */
+        #pantallaRoja {
+            display: none; 
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #ff0000;
+            z-index: 999999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* 🟢 PANTALLA NORMAL */
+        #contenidoReal {
+            display: block;
+            width: 100%;
+        }
+
+        .caja-central {
+            border: 3px solid #00ff00;
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 20px;
             background: #111;
-            max-width: 90%;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.2);
+            max-width: 400px;
+            margin: 0 auto;
         }
-        h1 { color: #00ff00; text-transform: uppercase; }
-        .codigo {
+
+        h1 { color: #00ff00; margin-bottom: 10px; font-size: 24px; }
+        p { font-size: 16px; color: #ccc; }
+
+        /* EL BOTÓN (Lo tapa el Muro de CPAGrip) */
+        .btn-revelar {
+            background-color: #00ff00;
+            color: #000;
+            font-size: 20px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 900;
+            text-transform: uppercase;
+            box-shadow: 0 5px 0 #009900;
+            margin-top: 20px;
+        }
+
+        /* ZONA DEL CÓDIGO FINAL (OCULTA) */
+        #zonaResultado {
+            display: none;
+            margin-top: 25px;
+            animation: fadeIn 0.5s;
+        }
+        
+        .codigo-final {
             font-size: 40px;
-            color: yellow;
-            font-weight: bold;
-            border: 2px dashed #fff;
-            padding: 15px;
-            margin: 20px 0;
-            letter-spacing: 3px;
+            color: #ffff00;
+            border: 2px dashed #ffff00;
+            padding: 10px;
+            margin: 15px 0;
+            background: #000;
+            letter-spacing: 2px;
         }
-        .info { color: #888; font-size: 12px; margin-top: 20px; }
+
+        /* FRASE DE INSTRUCCIÓN */
+        .instruccion {
+            color: #00ff00;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 10px;
+            animation: parpadeo 2s infinite;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes parpadeo { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>🔓 ¡Misión Completada!</h1>
-        <p>Tu código de acceso para <b>HOY</b> es:</p>
-        <div id="cajaCodigo" class="codigo">...</div>
-        <p>Cópialo y vuelve a la App.</p>
-        <div class="info">Este código caduca a las 00:00h</div>
+    <div id="pantallaRoja">
+        <div style="font-size: 60px;">🛑</div>
+        <h1>ADBLOCK DETECTADO</h1>
+        <p style="color: white; font-weight: normal;">El sistema no funciona con bloqueadores.</p>
+        <div style="background: white; color: red; padding: 15px; border-radius: 10px; margin-top: 20px; font-weight: bold;">
+            DESACTÍVALO Y RECARGA
+        </div>
+    </div>
+
+    <div id="contenidoReal">
+        <div class="caja-central">
+            <h1>🔐 ZONA DE SEGURIDAD</h1>
+            <p>Verificación requerida para acceder.</p>
+
+            <button id="btnAccion" class="btn-revelar" onclick="mostrarElCodigo()">
+                👇 VER CÓDIGO 👇
+            </button>
+
+            <div id="zonaResultado">
+                <p>CÓDIGO DE HOY:</p>
+                <div id="txtCodigo" class="codigo-final">...</div>
+                
+                <p class="instruccion">👉 PEGA ESTE CÓDIGO EN TU APP 👈</p>
+            </div>
+        </div>
     </div>
 
     <script>
-        var fecha = new Date();
-        var dia = fecha.getDate();
-        var codigo = "ROBUX" + dia;
-        document.getElementById("cajaCodigo").innerText = codigo;
+        // --- 🛡️ SISTEMA DE SEGURIDAD ---
+        function activarAntiAdblock() {
+            document.getElementById("contenidoReal").style.display = "none";
+            document.getElementById("pantallaRoja").style.display = "flex";
+        }
+
+        window.onload = function() {
+            var trampa = document.createElement('div');
+            trampa.className = 'ad-banner adsbox'; 
+            trampa.style.height = '1px';
+            document.body.appendChild(trampa);
+
+            setTimeout(function() {
+                if (trampa.offsetHeight === 0) {
+                    activarAntiAdblock();
+                }
+                trampa.remove();
+            }, 300);
+        };
+
+        // --- 🧠 LÓGICA DEL CÓDIGO ---
+        function mostrarElCodigo() {
+            var fecha = new Date();
+            var dia = fecha.getDate(); 
+            var codigoSecreto = "ROBUX" + dia;
+
+            document.getElementById("txtCodigo").innerText = codigoSecreto;
+            document.getElementById("btnAccion").style.display = "none";
+            document.getElementById("zonaResultado").style.display = "block";
+        }
     </script>
 
 </body>
