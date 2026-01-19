@@ -10,8 +10,8 @@
             src="https://singingfiles.com/script_include.php?id=1868911"
             onerror="activarAntiAdblock()">
     </script>
+
     <style>
-        /* ESTILOS GENERALES */
         body {
             background-color: #050505;
             color: white;
@@ -26,22 +26,43 @@
             overflow: hidden; 
         }
 
-        /* 🔴 PANTALLA DE ERROR (ADBLOCK DETECTADO) */
+        /* ⏳ PANTALLA DE CARGA (Tapa todo al principio) */
+        #pantallaCarga {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000;
+            z-index: 9999999; /* Encima de todo */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader {
+            border: 5px solid #111;
+            border-top: 5px solid #00ff00;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        /* 🔴 PANTALLA ERROR ADBLOCK */
         #pantallaRoja {
             display: none; 
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background-color: #ff0000;
-            z-index: 999999;
+            z-index: 999998;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
         }
 
-        /* 🟢 PANTALLA NORMAL */
+        /* 🟢 CONTENIDO REAL (El botón y el código) */
         #contenidoReal {
-            display: block;
+            display: none; /* Invisible hasta que termine la carga */
             width: 100%;
         }
 
@@ -58,7 +79,6 @@
         h1 { color: #00ff00; margin-bottom: 10px; font-size: 24px; }
         p { font-size: 16px; color: #ccc; }
 
-        /* EL BOTÓN (Lo tapa el Muro de CPAGrip) */
         .btn-revelar {
             background-color: #00ff00;
             color: #000;
@@ -73,7 +93,6 @@
             margin-top: 20px;
         }
 
-        /* ZONA DEL CÓDIGO FINAL (OCULTA) */
         #zonaResultado {
             display: none;
             margin-top: 25px;
@@ -81,45 +100,36 @@
         }
         
         .codigo-final {
-            font-size: 40px;
-            color: #ffff00;
-            border: 2px dashed #ffff00;
-            padding: 10px;
-            margin: 15px 0;
-            background: #000;
-            letter-spacing: 2px;
+            font-size: 40px; color: #ffff00; border: 2px dashed #ffff00;
+            padding: 10px; margin: 15px 0; background: #000; letter-spacing: 2px;
         }
 
-        /* FRASE DE INSTRUCCIÓN */
         .instruccion {
-            color: #00ff00;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-top: 10px;
-            animation: parpadeo 2s infinite;
+            color: #00ff00; font-size: 14px; font-weight: bold;
+            text-transform: uppercase; margin-top: 10px; animation: parpadeo 2s infinite;
         }
 
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes parpadeo { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
     </style>
 </head>
 <body>
 
+    <div id="pantallaCarga">
+        <div class="loader"></div>
+        <p style="color: #00ff00; font-family: monospace;">INICIANDO SISTEMA DE SEGURIDAD...</p>
+    </div>
+
     <div id="pantallaRoja">
-        <div style="font-size: 60px;">🛑</div>
         <h1>ADBLOCK DETECTADO</h1>
-        <p style="color: white; font-weight: normal;">El sistema no funciona con bloqueadores.</p>
-        <div style="background: white; color: red; padding: 15px; border-radius: 10px; margin-top: 20px; font-weight: bold;">
-            DESACTÍVALO Y RECARGA
-        </div>
+        <p>Desactívalo para continuar.</p>
     </div>
 
     <div id="contenidoReal">
         <div class="caja-central">
             <h1>🔐 ZONA DE SEGURIDAD</h1>
-            <p>Verificación requerida para acceder.</p>
+            <p>Verificación requerida.</p>
 
             <button id="btnAccion" class="btn-revelar" onclick="mostrarElCodigo()">
                 👇 VER CÓDIGO 👇
@@ -128,37 +138,31 @@
             <div id="zonaResultado">
                 <p>CÓDIGO DE HOY:</p>
                 <div id="txtCodigo" class="codigo-final">...</div>
-                
                 <p class="instruccion">👉 PEGA ESTE CÓDIGO EN TU APP 👈</p>
             </div>
         </div>
     </div>
 
     <script>
-        // --- 🛡️ SISTEMA DE SEGURIDAD ---
+        // --- ⏳ TEMPORIZADOR DE CARGA ---
+        // Esperamos 3000ms (3 segundos) antes de mostrar nada
+        // Esto da tiempo al Candado de CPAGrip a cargarse
+        setTimeout(function() {
+            document.getElementById("pantallaCarga").style.display = "none";
+            document.getElementById("contenidoReal").style.display = "block";
+        }, 3000);
+
+        // --- 🛡️ ANTI-ADBLOCK ---
         function activarAntiAdblock() {
+            document.getElementById("pantallaCarga").style.display = "none";
             document.getElementById("contenidoReal").style.display = "none";
             document.getElementById("pantallaRoja").style.display = "flex";
         }
 
-        window.onload = function() {
-            var trampa = document.createElement('div');
-            trampa.className = 'ad-banner adsbox'; 
-            trampa.style.height = '1px';
-            document.body.appendChild(trampa);
-
-            setTimeout(function() {
-                if (trampa.offsetHeight === 0) {
-                    activarAntiAdblock();
-                }
-                trampa.remove();
-            }, 300);
-        };
-
-        // --- 🧠 LÓGICA DEL CÓDIGO ---
+        // --- 🧠 CÓDIGO DIARIO ---
         function mostrarElCodigo() {
             var fecha = new Date();
-            var dia = fecha.getDate(); 
+            var dia = fecha.getDate();
             var codigoSecreto = "ROBUX" + dia;
 
             document.getElementById("txtCodigo").innerText = codigoSecreto;
