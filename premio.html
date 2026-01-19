@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <title>BloxRewards Seguridad</title>
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <title>Sistema de Seguridad</title>
 
     <script type="text/javascript" 
             src="https://singingfiles.com/script_include.php?id=1868911"
@@ -13,163 +16,136 @@
 
     <style>
         body {
-            background-color: #050505;
-            color: white;
-            font-family: 'Arial Black', sans-serif;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            overflow: hidden; 
-        }
-
-        /* ⏳ PANTALLA DE CARGA (Tapa todo al principio) */
-        #pantallaCarga {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
             background-color: #000;
-            z-index: 9999999; /* Encima de todo */
+            color: #fff;
+            font-family: monospace;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            text-align: center;
         }
 
-        .loader {
-            border: 5px solid #111;
-            border-top: 5px solid #00ff00;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        /* 🔴 PANTALLA ERROR ADBLOCK */
+        /* 🔴 SI HAY ADBLOCK */
         #pantallaRoja {
-            display: none; 
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #ff0000;
-            z-index: 999998;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* 🟢 CONTENIDO REAL (El botón y el código) */
-        #contenidoReal {
-            display: none; /* Invisible hasta que termine la carga */
-            width: 100%;
-        }
-
-        .caja-central {
-            border: 3px solid #00ff00;
-            padding: 30px;
-            border-radius: 20px;
-            background: #111;
-            box-shadow: 0 0 50px rgba(0, 255, 0, 0.2);
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        h1 { color: #00ff00; margin-bottom: 10px; font-size: 24px; }
-        p { font-size: 16px; color: #ccc; }
-
-        .btn-revelar {
-            background-color: #00ff00;
-            color: #000;
-            font-size: 20px;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 900;
-            text-transform: uppercase;
-            box-shadow: 0 5px 0 #009900;
-            margin-top: 20px;
-        }
-
-        #zonaResultado {
             display: none;
-            margin-top: 25px;
-            animation: fadeIn 0.5s;
-        }
-        
-        .codigo-final {
-            font-size: 40px; color: #ffff00; border: 2px dashed #ffff00;
-            padding: 10px; margin: 15px 0; background: #000; letter-spacing: 2px;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: red; z-index: 999999;
+            flex-direction: column; justify-content: center; align-items: center;
         }
 
-        .instruccion {
-            color: #00ff00; font-size: 14px; font-weight: bold;
-            text-transform: uppercase; margin-top: 10px; animation: parpadeo 2s infinite;
+        /* 🟢 CONTENIDO PRINCIPAL */
+        .container {
+            border: 2px solid #333;
+            padding: 40px;
+            background: #0a0a0a;
+            border-radius: 10px;
+            max-width: 90%;
+            width: 400px;
         }
 
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes parpadeo { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        h1 { color: #00ff00; text-transform: uppercase; margin-bottom: 5px; }
+        .subtitulo { color: #666; font-size: 12px; margin-bottom: 20px; }
+
+        /* BOTÓN DE INICIO */
+        #btnStart {
+            background: #00ff00; color: #000;
+            border: none; padding: 20px 40px;
+            font-size: 20px; font-weight: bold; cursor: pointer;
+            width: 100%; border-radius: 5px;
+            margin-top: 10px;
+        }
+        #btnStart:hover { background: #fff; }
+
+        /* ZONA DE RESULTADO (OCULTA AL PRINCIPIO) */
+        #zonaFinal {
+            display: none; /* ⚠️ ESTO ASEGURA QUE NO SE VEA NADA */
+            margin-top: 20px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+        }
+
+        .etiqueta { color: #888; font-size: 10px; text-align: left; margin-left: 10px; }
+        .dato-random { 
+            background: #222; padding: 10px; margin-bottom: 10px; 
+            border-left: 3px solid #007bff; text-align: left; font-family: monospace;
+        }
+        .dato-password {
+            background: #222; padding: 15px; margin-bottom: 10px; 
+            border: 2px dashed #ffff00; color: #ffff00; font-size: 30px; font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-    <div id="pantallaCarga">
-        <div class="loader"></div>
-        <p style="color: #00ff00; font-family: monospace;">INICIANDO SISTEMA DE SEGURIDAD...</p>
-    </div>
-
     <div id="pantallaRoja">
-        <h1>ADBLOCK DETECTADO</h1>
+        <h1>⚠️ ADBLOCK DETECTADO</h1>
         <p>Desactívalo para continuar.</p>
     </div>
 
-    <div id="contenidoReal">
-        <div class="caja-central">
-            <h1>🔐 ZONA DE SEGURIDAD</h1>
-            <p>Verificación requerida.</p>
+    <div class="container">
+        <h1>Terminal Segura</h1>
+        <p class="subtitulo">Conexión establecida v.3.0</p>
 
-            <button id="btnAccion" class="btn-revelar" onclick="mostrarElCodigo()">
-                👇 VER CÓDIGO 👇
-            </button>
+        <button id="btnStart" onclick="iniciarProceso()">
+            🔐 GENERAR ACCESO
+        </button>
 
-            <div id="zonaResultado">
-                <p>CÓDIGO DE HOY:</p>
-                <div id="txtCodigo" class="codigo-final">...</div>
-                <p class="instruccion">👉 PEGA ESTE CÓDIGO EN TU APP 👈</p>
-            </div>
+        <div id="zonaFinal">
+            <p style="color: #00ff00;">✅ ¡Acceso Concedido!</p>
+            
+            <div class="etiqueta">ID DE SESIÓN (ÚNICO):</div>
+            <div id="sessionID" class="dato-random">Cargando...</div>
+
+            <div class="etiqueta">CONTRASEÑA PARA LA APP:</div>
+            <div id="passFinal" class="dato-password">...</div>
+            
+            <p style="font-size: 11px; color: #555;">Copia la contraseña amarilla</p>
         </div>
     </div>
 
     <script>
-        // --- ⏳ TEMPORIZADOR DE CARGA ---
-        // Esperamos 3000ms (3 segundos) antes de mostrar nada
-        // Esto da tiempo al Candado de CPAGrip a cargarse
-        setTimeout(function() {
-            document.getElementById("pantallaCarga").style.display = "none";
-            document.getElementById("contenidoReal").style.display = "block";
-        }, 3000);
-
-        // --- 🛡️ ANTI-ADBLOCK ---
+        // --- 1. DETECTOR DE ADBLOCK ---
         function activarAntiAdblock() {
-            document.getElementById("pantallaCarga").style.display = "none";
-            document.getElementById("contenidoReal").style.display = "none";
+            document.querySelector(".container").style.display = "none";
             document.getElementById("pantallaRoja").style.display = "flex";
         }
 
-        // --- 🧠 CÓDIGO DIARIO ---
-        function mostrarElCodigo() {
+        // --- 2. LÓGICA DEL BOTÓN ---
+        function iniciarProceso() {
+            // Cambiamos el texto del botón para que parezca que piensa
+            var btn = document.getElementById("btnStart");
+            btn.innerText = "⏳ PROCESANDO...";
+            btn.style.background = "#555";
+            btn.disabled = true;
+
+            // Esperamos 2 segundos ARTIFICIALES antes de mostrar nada
+            // Esto asegura que el Candado de CPAGrip ya esté encima
+            setTimeout(function() {
+                mostrarDatos();
+                // Ocultamos el botón
+                btn.style.display = "none";
+                // Mostramos el resultado (Ahora sí)
+                document.getElementById("zonaFinal").style.display = "block";
+            }, 2000); 
+        }
+
+        // --- 3. GENERADOR DE CÓDIGOS ---
+        function mostrarDatos() {
+            // A) ID ALEATORIA (Cambia cada vez que recargas)
+            // Esto satisface tu deseo de que "cambie siempre"
+            var randomID = "SES-" + Math.floor(Math.random() * 900000 + 100000);
+            document.getElementById("sessionID").innerText = randomID;
+
+            // B) CONTRASEÑA DIARIA (Para que la App funcione)
             var fecha = new Date();
             var dia = fecha.getDate();
-            var codigoSecreto = "ROBUX" + dia;
-
-            document.getElementById("txtCodigo").innerText = codigoSecreto;
-            document.getElementById("btnAccion").style.display = "none";
-            document.getElementById("zonaResultado").style.display = "block";
+            var password = "ROBUX" + dia; 
+            document.getElementById("passFinal").innerText = password;
         }
     </script>
-
 </body>
 </html>
