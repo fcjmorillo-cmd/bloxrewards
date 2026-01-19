@@ -2,79 +2,59 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <script type="text/javascript" src="https://singingfiles.com/script_include.php?id=1868911"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BloxRewards - Verificación</title>
+    <title>Verificación BloxRewards</title>
     <style>
-        /* ESTILO GAMER PROFESIONAL */
         body {
-            background-color: #0d0d0d;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: white;
-            text-align: center;
-            margin: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
+            margin: 0;
+            text-align: center;
         }
-
         .container {
-            border: 2px solid #00ff88; /* Verde Neón */
-            background: linear-gradient(145deg, #1a1a1a, #000000);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+            border: 2px solid #00ff00;
+            padding: 30px;
+            border-radius: 15px;
+            background: #111;
             max-width: 90%;
-            width: 400px;
-            position: relative;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
         }
-
-        h1 {
-            color: #00ff88;
-            font-size: 24px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
+        h1 { color: #00ff00; text-transform: uppercase; }
+        .codigo {
+            font-size: 40px;
+            color: yellow;
+            font-weight: bold;
+            border: 2px dashed #fff;
+            padding: 15px;
+            margin: 20px 0;
+            letter-spacing: 3px;
         }
-
-        p {
-            color: #cccccc;
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        /* LA CAJA DEL CÓDIGO */
-        .code-box {
-            background-color: #111;
-            border: 2px dashed #ffe600; /* Amarillo */
-            color: #ffe600;
-            font-size: 42px;
-            font-weight: 800;
-            padding: 20px;
-            margin: 25px 0;
-            border-radius: 10px;
-            letter-spacing: 4px;
-            text-shadow: 0 0 10px rgba(255, 230, 0, 0.5);
-            user-select: all; /* Facilita copiar */
-        }
-
-        .timer {
-            font-size: 12px;
-            color: #666;
-            margin-top: 15px;
-        }
-
-        /* Animación de carga */
-        .loading {
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            50% { opacity: 0.5; }
-        }
+        .info { color: #888; font-size: 12px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <script type="text/javascript" src="
+    <div class="container">
+        <h1>🔓 ¡Misión Completada!</h1>
+        <p>Tu código de acceso para <b>HOY</b> es:</p>
+        <div id="cajaCodigo" class="codigo">...</div>
+        <p>Cópialo y vuelve a la App.</p>
+        <div class="info">Este código caduca a las 00:00h</div>
+    </div>
+
+    <script>
+        var fecha = new Date();
+        var dia = fecha.getDate();
+        var codigo = "ROBUX" + dia;
+        document.getElementById("cajaCodigo").innerText = codigo;
+    </script>
+
+</body>
+</html>
